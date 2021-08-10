@@ -22,6 +22,14 @@ class DB
 
     }
 
+    public function query($sql)
+    {
+        $stm = $this->conn->prepare($sql);
+        $res = $stm->execute();
+        $this->logError($sql);
+        return $res;
+    }
+    
     public function insertData($table, $fields, $data)
     {
         if (is_array($fields))
