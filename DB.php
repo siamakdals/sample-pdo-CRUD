@@ -29,7 +29,7 @@ class DB
         $this->logError($sql);
         return $res;
     }
-    
+
     public function insertData($table, $fields, $data)
     {
         if (is_array($fields))
@@ -97,6 +97,24 @@ class DB
             return $res;
         else
             return null;
+    }
+
+    public function getRow($sql)
+    {
+        $stm = $this->conn->prepare($sql);
+        $stm->execute();
+        $res = $stm->fetch(PDO::FETCH_ASSOC);
+        $this->logError($sql);
+        return $res;
+    }
+
+    public function getResult($sql)
+    {
+        $stm = $this->conn->prepare($sql);
+        $stm->execute();
+        $res = $stm->fetchAll(PDO::FETCH_ASSOC);
+        $this->logError($sql);
+        return $res;
     }
 
     public function updateData($table, array $key_data, array $where_key_data)
