@@ -1,7 +1,7 @@
 <?php
 
 
-class DB
+class botDb
 {
 
     private $conn = '';
@@ -32,6 +32,7 @@ class DB
 
     public function insertData($table, $fields, $data)
     {
+
         if (is_array($fields))
             $fields = implode(',', $fields);
 
@@ -48,6 +49,20 @@ class DB
             return $this->conn->lastInsertId();
         else
             return null;
+    }
+
+    public function multiInsert(array $data, array $table_columns, $table)
+    {
+        $fields = implode(',', $table_columns);
+        $sql = [];
+
+        foreach ((array)$data as $row) {
+            $sql[] = "('" . implode("','", $row) . "')";
+        }
+
+        $values = implode(',', $sql);
+
+        return $this->query("INSERT INTO {$table} ({$fields}) VALUES {$values}");
     }
 
     public function getData($table, $fields = '*', array $where_key_data, $order = 'ASC', $order_by = 'id',
@@ -85,6 +100,7 @@ class DB
         if (!empty($offset))
             $sql .= " OFFSET {$offset}";
         $sql_smt = $sql;
+
         $sql = $this->conn->prepare($sql);
         $sql->execute();
         if ($fetchAll)
