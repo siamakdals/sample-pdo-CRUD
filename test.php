@@ -2,7 +2,7 @@
 
 include_once 'DB.php';
 
-//create object
+#create object
 $DB = new DB('taskmanager', 'root', '');
 
 
