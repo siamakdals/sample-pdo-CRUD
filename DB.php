@@ -1,7 +1,7 @@
 <?php
 
 
-class botDb
+class DB
 {
 
     private $conn = '';
