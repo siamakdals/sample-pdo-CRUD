@@ -133,7 +133,7 @@ class DB
         return $res;
     }
 
-    public function updateData($table, array $key_data, array $where_key_data)
+    public function updateData($table, array $key_data)
     {
         $sql = '';
         $last_key = '';
@@ -162,6 +162,29 @@ class DB
             return true;
         else
             return null;
+    }
+
+    public function upsert($table, array $key_data)
+    {
+        $sql = '';
+        $keys = array_keys($key_data);
+        $last_key = end($keys);
+        foreach ($keys as $key) {
+            $virgol = $key === $last_key ? '' : ',';
+            $sql .= $key . "='" . $key_data[$key] . "'$virgol";
+        }
+
+
+        $fields = implode(',', $keys);
+        $data = implode("','", $key_data);
+
+        $data = "'" . $data . "'";
+
+
+        $sql = "INSERT INTO users ($fields) VALUES ($data)
+            ON DUPLICATE KEY UPDATE $sql;";
+
+        $this->query($sql);
     }
 
     public function deleteData($table, array $where_key_data)
