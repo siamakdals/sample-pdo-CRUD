@@ -181,10 +181,10 @@ class DB
         $data = "'" . $data . "'";
 
 
-        $sql = "INSERT INTO users ($fields) VALUES ($data)
+        $sql = "INSERT INTO {$table} ($fields) VALUES ($data)
             ON DUPLICATE KEY UPDATE $sql;";
 
-        $this->query($sql);
+        return $this->query($sql);
     }
 
     public function deleteData($table, array $where_key_data)
